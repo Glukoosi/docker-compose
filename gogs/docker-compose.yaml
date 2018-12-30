@@ -1,0 +1,31 @@
+version: '3'
+services:
+  gogs:
+    image: gogs/gogs:latest
+    container_name: gogs
+    volumes:
+     - ./gogs-data:/data
+    expose:
+     - "3000"
+    ports:
+     - "10022:22"
+    restart: always
+
+  gogs-nginx:
+    image: nginx:alpine
+    container_name: gogs-nginx
+    expose:
+     - "443"
+    environment:
+     - VIRTUAL_HOST=gogs.glukoo.si
+     - VIRTUAL_PORT=443
+     - LETSENCRYPT_HOST=gogs.glukoo.si
+     - LETSENCRYPT_EMAIL=aleksi@seppanen.me
+    volumes:
+     - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
