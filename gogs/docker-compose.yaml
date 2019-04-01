@@ -5,27 +5,18 @@ services:
     container_name: gogs
     volumes:
      - ./gogs-data:/data
-    expose:
-     - "3000"
     ports:
      - "10022:22"
     restart: always
-
-  gogs-nginx:
-    image: nginx:alpine
-    container_name: gogs-nginx
-    expose:
-     - "80"
-    environment:
-     - VIRTUAL_HOST=gogs.glukoo.si
-     - VIRTUAL_PORT=80
-     - LETSENCRYPT_HOST=gogs.glukoo.si
-     - LETSENCRYPT_EMAIL=aleksi@seppanen.me
-    volumes:
-     - ./nginx.conf:/etc/nginx/nginx.conf
-    restart: always
+    labels:
+     - "traefik.enable=true"
+     - "traefik.backend=gogs"
+     - "traefik.docker.network=web"
+     - "traefik.frontend.rule=Host:gogs.glukoo.si"
+     - "traefik.port=3000"
+    networks:
+     - web
 
 networks:
-  default:
-    external:
-      name: nginx-proxy
+  web:
+    external: true
