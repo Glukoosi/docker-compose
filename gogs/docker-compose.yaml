@@ -15,10 +15,10 @@ services:
     image: nginx:alpine
     container_name: gogs-nginx
     expose:
-     - "443"
+     - "80"
     environment:
      - VIRTUAL_HOST=gogs.glukoo.si
-     - VIRTUAL_PORT=443
+     - VIRTUAL_PORT=80
      - LETSENCRYPT_HOST=gogs.glukoo.si
      - LETSENCRYPT_EMAIL=aleksi@seppanen.me
     volumes:
